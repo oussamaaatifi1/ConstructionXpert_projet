@@ -14,38 +14,34 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/projects")
+@RequestMapping("/api/Projet/")
 public class ProjetController {
-
     @Autowired
-    private ProjetServiceImpl projectService;
+    ProjetServiceImpl ProjetService;
 
-    @GetMapping
-    public List<Projet> getAllProjects() {
-        return projectService.getAllProjects();
+    @PostMapping("add")
+    public Projet addProjet(@RequestBody Projet Projet){
+        return ProjetService.ajouterProjet(Projet);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Projet> getProjectById(@PathVariable Long id) {
-        return projectService.getProjectById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("all")
+    public List<Projet> getAll(){
+        return ProjetService.allProjets();
     }
 
-    @PostMapping
-    public Projet createProject(@RequestBody Projet project) {
-        return projectService.createProject(project);
+//    @GetMapping("{id}")
+//    public FullProjetResponse projetWithTaches(@PathVariable Long id){
+//        return ProjetService.projetWithTaches(id);
+//    }
+
+    @PutMapping("edit/{id}")
+    public Projet edit(@PathVariable Long id, @RequestBody Projet Projet){
+        return ProjetService.modifierProjet(id, Projet);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Projet> updateProject(@PathVariable Long id, @RequestBody Projet projectDetails) {
-        return ResponseEntity.ok(projectService.updateProject(id, projectDetails));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
-        projectService.deleteProject(id);
-        return ResponseEntity.noContent().build();
-    }
+//    @DeleteMapping("delete/{id}")
+//    public void delete(@PathVariable Long id){
+//        ProjetService.supprimerProjet(id);
+//    }
 }
 

@@ -1,5 +1,23 @@
+server:
+  port: 8084
+
 spring:
   application:
-    name: gateway
-  config:
-    import: optional:configserver:http://localhost:8888
+    name: api-gateway
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: projet-service
+            uri: http://localhost:8090
+            predicates:
+              - Path=/api/Projet/**
+          - id: TacheService
+            uri: http://localhost:8070
+            predicates:
+              - Path=/taches/**
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

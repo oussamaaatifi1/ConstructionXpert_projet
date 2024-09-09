@@ -3,15 +3,19 @@ eureka:
     hostname: localhost
   client:
     service-url:
-      defautltZone: http://localhost:8761/eureka
+      defaultZone: http://localhost:8761/eureka
+
 server:
   port: 8090
+
 spring:
   application:
-    name: projets
+    name: PROJETS
+  config:
+    import: optional:configserver:http://localhost:8888
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/projets
+    url: jdbc:postgresql://localhost:5432/projectdb
     username: postgres
     password: admin
   jpa:
@@ -20,12 +24,9 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   flyway:
-    locations: db/megration
+    locations: classpath:db/migration
     baseline-on-migrate: true
 
 application:
   config:
-    taches-url: http://localhost:8222/api/taches
-
-    config:
-      import: configserver:http://localhost:8888
+    taches-url: http://tacheservice/api/taches

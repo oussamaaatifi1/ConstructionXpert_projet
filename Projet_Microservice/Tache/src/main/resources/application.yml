@@ -1,15 +1,13 @@
 spring:
   application:
-    name: TacheService
+    name: TACHESERVICE
   config:
     import: optional:configserver:http://localhost:8888
-
   datasource:
     url: jdbc:postgresql://localhost:5432/TachDb
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: admin
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -17,3 +15,8 @@ spring:
 
 server:
   port: 8070
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

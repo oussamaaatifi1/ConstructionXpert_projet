@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface ProjetService {
 
-    public List<Projet> getAllProjects();
-    public Optional<Projet> getProjectById(Long id);
-    public Projet createProject(Projet project);
-    public Projet updateProject(Long id, Projet projectDetails);
-    public void deleteProject(Long id);
+    public Projet ajouterProjet(Projet projet);
+    public Projet modifierProjet(Long id, Projet projet);
+    public List<Projet> allProjets();
+//    public void supprimerProjet(Long id);
+//    public FullProjetResponse projetWithTaches(Long id);
 }
