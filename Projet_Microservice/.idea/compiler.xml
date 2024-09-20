@@ -15,6 +15,9 @@
         <module name="Tache" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ressources" target="21" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -23,6 +26,7 @@
       <module name="config-server" options="-parameters" />
       <module name="discovery" options="-parameters" />
       <module name="gatway" options="-parameters" />
+      <module name="ressources" options="-parameters" />
       <module name="utilisateur" options="-parameters" />
     </option>
   </component>

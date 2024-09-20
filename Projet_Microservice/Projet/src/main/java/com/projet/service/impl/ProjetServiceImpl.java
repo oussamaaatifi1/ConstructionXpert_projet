@@ -1,7 +1,7 @@
 package com.projet.service.impl;
 
-
-import com.projet.config.TachesClient;
+import com.projet.dto.ProjetDTO;
+import com.projet.mapper.ProjetMapper;
 import com.projet.model.Projet;
 import com.projet.repository.ProjetRepository;
 import com.projet.service.ProjetService;
@@ -11,59 +11,45 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
-public class ProjetServiceImpl implements ProjetService{
+public class ProjetServiceImpl implements ProjetService {
 
     @Autowired
-    ProjetRepository projetsRepository;
-//    @Autowired
-//    TachesClient tachesClient;
+    private ProjetRepository projetsRepository;
+
+    @Autowired
+    private ProjetMapper projetMapper;
 
     @Override
-    public Projet ajouterProjet(Projet projet) {
+    public Projet ajouterProjet(ProjetDTO projetDTO) {
+        Projet projet = projetMapper.toEntity(projetDTO);
         return projetsRepository.save(projet);
     }
 
     @Override
-    public Projet modifierProjet(Long id, Projet projet) {
-        Projet edited = new Projet();
-        edited.setId(id);
-        edited.setName(projet.getName());
-        edited.setDescription(projet.getDescription());
-        edited.setBudget(projet.getBudget());
-        edited.setStartDate(projet.getStartDate());
-        edited.setEndDate(projet.getEndDate());
-        return projetsRepository.save(edited);
+    public Projet modifierProjet(Long id, ProjetDTO projetDTO) {
+        Projet existingProjet = projetsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Projet not found"));
+        existingProjet.setName(projetDTO.getName());
+        existingProjet.setDescription(projetDTO.getDescription());
+        existingProjet.setBudget(projetDTO.getBudget());
+        existingProjet.setStartDate(projetDTO.getStartDate());
+        existingProjet.setEndDate(projetDTO.getEndDate());
+        return projetsRepository.save(existingProjet);
     }
 
     @Override
-    public List<Projet> allProjets() {
-        return projetsRepository.findAll();
+    public List<ProjetDTO> allProjets() {
+        List<Projet> projets = projetsRepository.findAll();
+        return projets.stream()
+                .map(projetMapper::toDto)
+                .toList();
     }
 
-//    @Override
-//    public void supprimerProjet(Long id) {
-//        tachesClient.deleteTacheWithProjet(id);
-//        projetsRepository.deleteById(id);
-//    }
+    @Override
+    public void supprimerProjet(Long id) {
+        projetsRepository.deleteById(id);
+    }
 
-//    @Override
-//    public FullProjetResponse projetWithTaches(Long id) {
-//        Projet projet = projetsRepository.findById(id)
-//                .orElse(
-//                        Projet.builder()
-//                                .nom("NOT_FOUND")
-//                                .build()
-//                );
-//        List<Taches> taches = tachesClient.findAllTachesByProjet(id);
-//        return FullProjetResponse.builder()
-//                .nom(projet.getNom())
-//                .dateDebut(projet.getDateDebut())
-//                .dateFin(projet.getDateFin())
-//                .description(projet.getDescription())
-//                .budget(projet.getBudget())
-//                .taches(taches)
-//                .build();
-//    }
+
 }

@@ -10,7 +10,13 @@
         <option value="$PROJECT_DIR$/Projet/pom.xml" />
         <option value="$PROJECT_DIR$/Tache/pom.xml" />
         <option value="$PROJECT_DIR$/utilisateur/pom.xml" />
+        <option value="$PROJECT_DIR$/ressources/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/ressources/pom.xml" />
+      </set>
     </option>
     <option name="workspaceImportForciblyTurnedOn" value="true" />
   </component>
