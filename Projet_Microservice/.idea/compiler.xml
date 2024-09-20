@@ -12,6 +12,7 @@
         <module name="gatway" />
         <module name="utilisateur" />
         <module name="discovery" />
+        <module name="ressource-service" />
         <module name="Tache" />
       </profile>
     </annotationProcessing>
@@ -26,6 +27,7 @@
       <module name="config-server" options="-parameters" />
       <module name="discovery" options="-parameters" />
       <module name="gatway" options="-parameters" />
+      <module name="ressource-service" options="-parameters" />
       <module name="ressources" options="-parameters" />
       <module name="utilisateur" options="-parameters" />
     </option>
