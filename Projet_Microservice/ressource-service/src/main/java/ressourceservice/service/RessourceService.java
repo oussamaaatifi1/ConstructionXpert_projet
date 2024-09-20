@@ -1,15 +1,17 @@
 package ressourceservice.service;
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import ressourceservice.client.TacheClient;
+import ressourceservice.dto.RessourceDTO;
 import ressourceservice.exception.RessourceNotFoundException;
+import ressourceservice.mapper.RessourceMapper;
 import ressourceservice.model.Ressource;
 import ressourceservice.repository.RessourceRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RessourceService {
@@ -17,56 +19,51 @@ public class RessourceService {
     @Autowired
     private RessourceRepository ressourceRepository;
 
-
-
     @Autowired
-    private TacheClient tacheClient;
+    private RessourceMapper ressourceMapper;
 
-    public void addRessource(Ressource ressource, int idTache){
-
-        try {
-            tacheClient.getTacheById(idTache);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Tache non trouvé : " + idTache);
-        }
-
-        ressource.setIdTache(idTache);
-        ressourceRepository.save(ressource);
+    public RessourceDTO addRessource(RessourceDTO ressourceDTO) {
+        Ressource ressource = ressourceMapper.toEntity(ressourceDTO);
+        Ressource savedRessource = ressourceRepository.save(ressource);
+        return ressourceMapper.toDto(savedRessource);
     }
 
-    public Ressource getRessource(Long idRessource) {
-
+    public RessourceDTO getRessourceById(int idRessource) {
         Ressource ressource = ressourceRepository
-                .findById(idRessource)
+                .findById((long) idRessource)
                 .orElseThrow(RessourceNotFoundException::new);
-        return ressource;
+        return ressourceMapper.toDto(ressource);
     }
 
-    public List<Ressource> getAllRessources() {
-        return ressourceRepository.findAll();
+    public List<RessourceDTO> getAllRessources() {
+        List<Ressource> ressources = ressourceRepository.findAll();
+        return ressources.stream()
+                .map(ressourceMapper::toDto)
+                .collect(Collectors.toList());
     }
 
-    public List<Ressource> getRessourcesByTache(int idTache){
-        return ressourceRepository.findByIdTache(idTache);
+    public List<RessourceDTO> getRessourcesByTache(int idTache) {
+        List<Ressource> ressources = ressourceRepository.findByIdTache(idTache);
+        return ressources.stream()
+                .map(ressourceMapper::toDto)
+                .collect(Collectors.toList());
     }
 
-    public void updateRessource(int idRessource, Ressource ressource) {
-        ressourceRepository
+    public RessourceDTO updateRessource(int idRessource, RessourceDTO ressourceDTO) {
+        Ressource existingRessource = ressourceRepository
                 .findById((long) idRessource)
                 .orElseThrow(RessourceNotFoundException::new);
 
-        ressource.setIdRessource(idRessource);
-
-        ressourceRepository.save(ressource);
+        Ressource updatedRessource = ressourceMapper.toEntity(ressourceDTO);
+        updatedRessource.setIdRessource(idRessource); // To ensure the same ID
+        Ressource savedRessource = ressourceRepository.save(updatedRessource);
+        return ressourceMapper.toDto(savedRessource);
     }
 
-    public void deleteRessource(Long idRessource) {
-        Ressource ressourceSupprime = ressourceRepository
-                .findById(idRessource)
+    public void deleteRessource(int idRessource) {
+        Ressource ressource = ressourceRepository
+                .findById((long) idRessource)
                 .orElseThrow(RessourceNotFoundException::new);
-
-        ressourceRepository.delete(ressourceSupprime);
+        ressourceRepository.delete(ressource);
     }
-
-
 }
